@@ -10,14 +10,16 @@ on:
       - reopened
     paths:
       - src/**
-      - client/**
+      - tests/**
+      - README.md
+      - LICENSE
       - package.json
       - yarn.lock
       - yakumo.yml
       - tsconfig.json
-      - client/tsconfig.json
       - .yarnrc.yml
       - .github/workflows/ci.yml
+      - .github/workflows/publish.yml
   workflow_dispatch:
 
 concurrency:
@@ -49,6 +51,9 @@ jobs:
       - name: Install dependencies
         run: yarn install --immutable
 
+      - name: Run tests
+        run: yarn test
+
       - name: Build package
         run: yarn build
 
@@ -57,9 +62,10 @@ jobs:
         run: |
           set -euo pipefail
 
+          test -f README.md
+          test -f LICENSE
           test -f lib/index.js
           test -f lib/index.d.ts
-          test -f dist/index.js
 
           npm pack --ignore-scripts --dry-run --json > /tmp/npm-pack.json
 
@@ -68,12 +74,17 @@ jobs:
           const [report] = JSON.parse(fs.readFileSync('/tmp/npm-pack.json', 'utf8'))
           const paths = new Set(report.files.map(file => file.path))
 
-          for (const path of ['package.json', 'lib/index.js', 'lib/index.d.ts', 'dist/index.js']) {
+          for (const path of ['package.json', 'README.md', 'LICENSE', 'lib/index.js', 'lib/index.d.ts']) {
             if (!paths.has(path)) throw new Error(`Missing required package file: ${path}`)
           }
 
           for (const path of paths) {
-            if (path.startsWith('src/') || path.startsWith('client/')) {
+            if (
+              path.startsWith('src/') ||
+              path.startsWith('tests/') ||
+              path.startsWith('client/') ||
+              path.startsWith('.local-docs/')
+            ) {
               throw new Error(`Source file must not be published: ${path}`)
             }
           }
