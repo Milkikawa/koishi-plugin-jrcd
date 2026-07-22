@@ -2,21 +2,42 @@
   "name": "@cozmello/koishi-plugin-jrcd",
   "description": "jrcd插件，迁移自",
   "version": "0.0.1",
+  "packageManager": "yarn@4.5.3",
   "main": "lib/index.js",
   "typings": "lib/index.d.ts",
   "files": [
     "lib",
     "dist"
   ],
+  "scripts": {
+    "build": "yakumo build",
+    "clean": "yakumo clean"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Milkikawa/koishi-plugin-jrcd"
+  },
+  "publishConfig": {
+    "access": "public",
+    "registry": "https://registry.npmjs.org"
+  },
   "license": "MIT",
-  "scripts": {},
   "keywords": [
     "chatbot",
     "koishi",
     "plugin"
   ],
   "devDependencies": {
-    "@koishijs/client": "^5.30.4"
+    "@koishijs/client": "^5.30.4",
+    "@koishijs/plugin-console": "^5.30.4",
+    "@types/node": "^22.7.5",
+    "esbuild": "^0.23.1",
+    "koishi": "^4.18.7",
+    "typescript": "^5.6.2",
+    "yakumo": "^1.0.0-beta.21",
+    "yakumo-esbuild": "^1.0.0-beta.7",
+    "yakumo-tsc": "^1.0.0-beta.5",
+    "yml-register": "^1.2.5"
   },
   "peerDependencies": {
     "@koishijs/plugin-console": "^5.30.4",

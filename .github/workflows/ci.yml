@@ -1,0 +1,80 @@
+name: CI
+
+on:
+  pull_request:
+    branches:
+      - main
+    types:
+      - opened
+      - synchronize
+      - reopened
+    paths:
+      - src/**
+      - client/**
+      - package.json
+      - yarn.lock
+      - yakumo.yml
+      - tsconfig.json
+      - client/tsconfig.json
+      - .yarnrc.yml
+      - .github/workflows/ci.yml
+  workflow_dispatch:
+
+concurrency:
+  group: ci-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    name: Build and verify package
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v6
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v6
+        with:
+          node-version: "24"
+          package-manager-cache: false
+
+      - name: Enable Corepack
+        run: corepack enable
+
+      - name: Install dependencies
+        run: yarn install --immutable
+
+      - name: Build package
+        run: yarn build
+
+      - name: Verify build outputs and package contents
+        shell: bash
+        run: |
+          set -euo pipefail
+
+          test -f lib/index.js
+          test -f lib/index.d.ts
+          test -f dist/index.js
+
+          npm pack --ignore-scripts --dry-run --json > /tmp/npm-pack.json
+
+          node <<'NODE'
+          const fs = require('node:fs')
+          const [report] = JSON.parse(fs.readFileSync('/tmp/npm-pack.json', 'utf8'))
+          const paths = new Set(report.files.map(file => file.path))
+
+          for (const path of ['package.json', 'lib/index.js', 'lib/index.d.ts', 'dist/index.js']) {
+            if (!paths.has(path)) throw new Error(`Missing required package file: ${path}`)
+          }
+
+          for (const path of paths) {
+            if (path.startsWith('src/') || path.startsWith('client/')) {
+              throw new Error(`Source file must not be published: ${path}`)
+            }
+          }
+          NODE

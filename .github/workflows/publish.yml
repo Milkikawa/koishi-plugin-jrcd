@@ -1,0 +1,111 @@
+name: Publish to npm
+run-name: ${{ github.ref_name }}
+
+on:
+  push:
+    tags:
+      - v*
+
+concurrency:
+  group: npm-publish-${{ github.ref_name }}
+  cancel-in-progress: false
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    environment: npm-publish
+    permissions:
+      contents: read
+      id-token: write
+
+    steps:
+      - name: Check out the tagged commit
+        uses: actions/checkout@v6
+        with:
+          ref: ${{ github.ref }}
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v6
+        with:
+          node-version: "24"
+          registry-url: https://registry.npmjs.org
+          package-manager-cache: false
+
+      - name: Set up npm and Yarn
+        shell: bash
+        run: |
+          set -euo pipefail
+          npm install --global npm@11.5.1
+          corepack enable
+          node --version
+          npm_version="$(npm --version)"
+          printf 'npm %s\n' "$npm_version"
+          yarn --version
+          node - "$npm_version" <<'NODE'
+          const npmVersion = process.argv[2]
+          if (!/^\d+\.\d+\.\d+$/.test(npmVersion)) {
+            throw new Error(`Expected npm version with three numeric components, got: ${npmVersion}`)
+          }
+          const [major, minor, patch] = npmVersion.split('.').map(Number)
+          const [minimumMajor, minimumMinor, minimumPatch] = [11, 5, 1]
+          if (
+            major < minimumMajor ||
+            (major === minimumMajor && minor < minimumMinor) ||
+            (major === minimumMajor && minor === minimumMinor && patch < minimumPatch)
+          ) {
+            throw new Error(`npm ${npmVersion} is too old; npm 11.5.1 or newer is required`)
+          }
+          NODE
+
+      - name: Verify tag and package version
+        shell: bash
+        env:
+          RELEASE_TAG: ${{ github.ref_name }}
+        run: |
+          set -euo pipefail
+
+          if [[ ! "$RELEASE_TAG" =~ ^v(0|[1-9][0-9]*)\.(0|[1-9][0-9]*)\.(0|[1-9][0-9]*)$ ]]; then
+            echo "Expected a stable semantic-version tag such as v0.0.2, got: $RELEASE_TAG" >&2
+            exit 1
+          fi
+
+          PACKAGE_VERSION="$(node -p "require('./package.json').version")"
+          if [[ "v$PACKAGE_VERSION" != "$RELEASE_TAG" ]]; then
+            echo "Tag $RELEASE_TAG does not match package.json version $PACKAGE_VERSION." >&2
+            exit 1
+          fi
+
+      - name: Install dependencies
+        run: yarn install --immutable
+
+      - name: Build package
+        run: yarn build
+
+      - name: Verify package contents
+        shell: bash
+        run: |
+          set -euo pipefail
+
+          test -f lib/index.js
+          test -f lib/index.d.ts
+          test -f dist/index.js
+
+          npm pack --ignore-scripts --dry-run --json > /tmp/npm-pack.json
+
+          node <<'NODE'
+          const fs = require('node:fs')
+          const [report] = JSON.parse(fs.readFileSync('/tmp/npm-pack.json', 'utf8'))
+          const paths = new Set(report.files.map(file => file.path))
+          for (const path of ['package.json', 'lib/index.js', 'lib/index.d.ts', 'dist/index.js']) {
+            if (!paths.has(path)) throw new Error(`Missing required package file: ${path}`)
+          }
+          for (const path of paths) {
+            if (path.startsWith('src/') || path.startsWith('client/')) {
+              throw new Error(`Source file must not be published: ${path}`)
+            }
+          }
+          NODE
+
+      - name: Publish package with npm trusted publishing
+        run: npm publish --ignore-scripts --access public --registry https://registry.npmjs.org
