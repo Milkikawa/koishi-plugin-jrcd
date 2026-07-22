@@ -1,12 +1,14 @@
 {
   "name": "@cozmello/koishi-plugin-jrcd",
-  "description": "jrcd插件，迁移自",
+  "description": "查看与比较每日固定随机长度的 Koishi 娱乐插件",
   "version": "0.0.1",
   "packageManager": "yarn@4.5.3",
   "main": "lib/index.js",
   "typings": "lib/index.d.ts",
   "files": [
-    "lib"
+    "lib",
+    "README.md",
+    "LICENSE"
   ],
   "scripts": {
     "build": "yakumo build",
@@ -15,7 +17,11 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/Milkikawa/koishi-plugin-jrcd"
+    "url": "git+https://github.com/Milkikawa/koishi-plugin-jrcd.git"
+  },
+  "homepage": "https://github.com/Milkikawa/koishi-plugin-jrcd#readme",
+  "bugs": {
+    "url": "https://github.com/Milkikawa/koishi-plugin-jrcd/issues"
   },
   "publishConfig": {
     "access": "public",
@@ -25,8 +31,17 @@
   "keywords": [
     "chatbot",
     "koishi",
-    "plugin"
+    "plugin",
+    "entertainment",
+    "daily",
+    "random"
   ],
+  "koishi": {
+    "description": {
+      "zh": "查看与比较每日固定随机长度的娱乐插件"
+    },
+    "preview": true
+  },
   "devDependencies": {
     "@types/node": "^22.7.5",
     "esbuild": "^0.23.1",
