@@ -16,6 +16,7 @@ yarn-error.log
 tsconfig.tsbuildinfo
 
 /.snow/
+/.local-docs/
 .eslintcache
 .DS_Store
 .idea

@@ -6,8 +6,7 @@
   "main": "lib/index.js",
   "typings": "lib/index.d.ts",
   "files": [
-    "lib",
-    "dist"
+    "lib"
   ],
   "scripts": {
     "build": "yakumo build",
@@ -28,8 +27,6 @@
     "plugin"
   ],
   "devDependencies": {
-    "@koishijs/client": "^5.30.4",
-    "@koishijs/plugin-console": "^5.30.4",
     "@types/node": "^22.7.5",
     "esbuild": "^0.23.1",
     "koishi": "^4.18.7",
@@ -40,7 +37,6 @@
     "yml-register": "^1.2.5"
   },
   "peerDependencies": {
-    "@koishijs/plugin-console": "^5.30.4",
     "koishi": "^4.18.7"
   }
 }
