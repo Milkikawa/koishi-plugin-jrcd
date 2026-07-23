@@ -1,21 +1,27 @@
 {
   "name": "@cozmello/koishi-plugin-jrcd",
-  "description": "jrcd插件，迁移自",
+  "description": "查看与比较每日固定随机长度的 Koishi 娱乐插件",
   "version": "0.0.1",
   "packageManager": "yarn@4.5.3",
   "main": "lib/index.js",
   "typings": "lib/index.d.ts",
   "files": [
     "lib",
-    "dist"
+    "README.md",
+    "LICENSE"
   ],
   "scripts": {
     "build": "yakumo build",
-    "clean": "yakumo clean"
+    "clean": "yakumo clean",
+    "test": "node --import tsx --test tests/*.test.ts"
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/Milkikawa/koishi-plugin-jrcd"
+    "url": "git+https://github.com/Milkikawa/koishi-plugin-jrcd.git"
+  },
+  "homepage": "https://github.com/Milkikawa/koishi-plugin-jrcd#readme",
+  "bugs": {
+    "url": "https://github.com/Milkikawa/koishi-plugin-jrcd/issues"
   },
   "publishConfig": {
     "access": "public",
@@ -25,14 +31,22 @@
   "keywords": [
     "chatbot",
     "koishi",
-    "plugin"
+    "plugin",
+    "entertainment",
+    "daily",
+    "random"
   ],
+  "koishi": {
+    "description": {
+      "zh": "查看与比较每日固定随机长度的娱乐插件"
+    },
+    "preview": true
+  },
   "devDependencies": {
-    "@koishijs/client": "^5.30.4",
-    "@koishijs/plugin-console": "^5.30.4",
     "@types/node": "^22.7.5",
     "esbuild": "^0.23.1",
     "koishi": "^4.18.7",
+    "tsx": "^4.16.2",
     "typescript": "^5.6.2",
     "yakumo": "^1.0.0-beta.21",
     "yakumo-esbuild": "^1.0.0-beta.7",
@@ -40,7 +54,6 @@
     "yml-register": "^1.2.5"
   },
   "peerDependencies": {
-    "@koishijs/plugin-console": "^5.30.4",
     "koishi": "^4.18.7"
   }
 }
