@@ -1,6 +1,6 @@
 {
   "name": "@cozmello/koishi-plugin-jrcd",
-  "description": "查看与比较每日固定随机长度的 Koishi 娱乐插件",
+  "description": "查看今日长度，然后跟群友比比谁的更长，争当今日牛子豪",
   "version": "0.1.0",
   "packageManager": "yarn@4.5.3",
   "main": "lib/index.js",
@@ -11,6 +11,7 @@
     "CHANGELOG.md",
     "LICENSE"
   ],
+  "author": "cozmello <yuzubako@outlook.com>",
   "scripts": {
     "build": "yakumo build",
     "clean": "yakumo clean",
@@ -39,9 +40,8 @@
   ],
   "koishi": {
     "description": {
-      "zh": "查看与比较每日固定随机长度的娱乐插件"
-    },
-    "preview": true
+      "zh": "查看今日长度，然后跟群友比比谁的更长，争当今日牛子豪"
+    }
   },
   "devDependencies": {
     "@types/node": "^22.7.5",
