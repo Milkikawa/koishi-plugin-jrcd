@@ -19,7 +19,6 @@
 - 每天北京时间 0 点刷新。
 - 长度范围为 `0`～`30` cm。
 - 修改 `seed` 会重新改变大家的结果。
-- 目前不使用数据库，也不保存历史记录，暂时没有排行榜、定时推送和图片功能。
 
 ## 配置
 
@@ -35,9 +34,10 @@
 
 ## 致谢与授权
 
-本项目由 `@yyyhf/koishi-plugin-jrcd@1.2.1` 重构而来，感谢原作者提供的玩法和代码。原插件采用 MIT 协议，本项目同样采用 [MIT 协议](./LICENSE)。
+本项目由 `@yyyhf/koishi-plugin-jrcd@1.2.1` 重构而来，感谢原作者提供的灵感和代码。原插件采用 MIT 协议，本项目同样采用 [MIT 协议](./LICENSE)。
 
 ## 链接
 
 - [GitHub 仓库](https://github.com/Milkikawa/koishi-plugin-jrcd)
+- [更新日志](./CHANGELOG.md)
 - [问题反馈](https://github.com/Milkikawa/koishi-plugin-jrcd/issues)
