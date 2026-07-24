@@ -17,6 +17,28 @@ const config: Config = {
   shorterLargeGapMessage: "shorter-large",
   shorterMediumGapMessage: "shorter-medium",
   shorterSmallGapMessage: "shorter-small",
+  maleLengthVeryLarge:
+    "♂今天的牛~牛长度是${length}cm，我靠，让哥哥爽一爽吧！\n(((o(*°▽°*)o)))...",
+  maleLengthLarge: "♂今天的牛~牛长度是${length}cm，哦豁？听说你很勇哦？\n(✧◡✧)",
+  maleLengthMedium:
+    "♂今天的牛~牛长度是${length}cm，小老弟不错啊，和哥哥一起玩会儿吗\n(〃∇〃)",
+  maleLengthSmall:
+    "♂今天的牛~牛长度是${length}cm，还行，也不是不能接受\n(๑´ㅂ´๑)",
+  maleLengthVerySmall:
+    "♂今天的牛~牛长度是${length}cm，啥啊？怎么这么小啊？\n(*°ｰ°)v",
+  maleLengthZero:
+    "♂今天的牛~牛长度是....今天你是女的啊？，算了算了\n︿(￣︶￣)︿",
+  femaleLengthVeryLarge:
+    "♀今天的牛~牛长度是${length}cm，嘶哈嘶哈\n(((o(*°▽°*)o)))...",
+  femaleLengthLarge:
+    "♀今天的牛~牛长度是${length}cm，单是看到哥哥的长度就....\n(〃w〃)",
+  femaleLengthMedium:
+    "♀今天的牛~牛长度是${length}cm，也许我们今晚能做很多很多事情呢\n(〃∇〃)",
+  femaleLengthSmall: "♀今天的牛~牛长度是${length}cm，可以让我一口吃掉吗\n罒ω罒",
+  femaleLengthVerySmall:
+    "♀今天的牛~牛长度是${length}cm，什么嘛，原来是可爱的小豆丁呀\n(*°ｰ°)v",
+  femaleLengthZero:
+    "♀今天的牛~牛长度是....今天你是女孩子，小姐姐的派派可以让我摸摸吗\n(๑‾ ꇴ ‾๑)",
 };
 
 function daily(length: number): DailyResult {
