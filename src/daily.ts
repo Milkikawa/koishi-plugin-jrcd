@@ -1,3 +1,5 @@
+import type { Config } from "./config";
+
 export type DailyStyle = "male" | "female";
 
 export interface DailyResult {
@@ -78,92 +80,79 @@ export function createDailyResult(
 
 export function formatDailyResult(
   result: DailyResult,
-  config?: {
-    maleLengthVeryLarge?: string;
-    maleLengthLarge?: string;
-    maleLengthMedium?: string;
-    maleLengthSmall?: string;
-    maleLengthVerySmall?: string;
-    maleLengthZero?: string;
-    femaleLengthVeryLarge?: string;
-    femaleLengthLarge?: string;
-    femaleLengthMedium?: string;
-    femaleLengthSmall?: string;
-    femaleLengthVerySmall?: string;
-    femaleLengthZero?: string;
-  }
+  config?: Partial<Config>
 ): string {
   const { length } = result;
 
   if (result.style === "male") {
     if (length > 25) {
       return (
-        config?.maleLengthVeryLarge?.replace("${length}", String(length)) ??
+        config?.maleLengthVeryLarge?.replaceAll("${length}", String(length)) ||
         `♂今天的牛~牛长度是${length}cm，我靠，让哥哥爽一爽吧！\n(((o(*°▽°*)o)))...`
       );
     }
     if (length > 20) {
       return (
-        config?.maleLengthLarge?.replace("${length}", String(length)) ??
+        config?.maleLengthLarge?.replaceAll("${length}", String(length)) ||
         `♂今天的牛~牛长度是${length}cm，哦豁？听说你很勇哦？\n(✧◡✧)`
       );
     }
     if (length > 15) {
       return (
-        config?.maleLengthMedium?.replace("${length}", String(length)) ??
+        config?.maleLengthMedium?.replaceAll("${length}", String(length)) ||
         `♂今天的牛~牛长度是${length}cm，小老弟不错啊，和哥哥一起玩会儿吗\n(〃∇〃)`
       );
     }
     if (length > 5) {
       return (
-        config?.maleLengthSmall?.replace("${length}", String(length)) ??
+        config?.maleLengthSmall?.replaceAll("${length}", String(length)) ||
         `♂今天的牛~牛长度是${length}cm，还行，也不是不能接受\n(๑´ㅂ´๑)`
       );
     }
     if (length > 1) {
       return (
-        config?.maleLengthVerySmall?.replace("${length}", String(length)) ??
+        config?.maleLengthVerySmall?.replaceAll("${length}", String(length)) ||
         `♂今天的牛~牛长度是${length}cm，啥啊？怎么这么小啊？\n(*°ｰ°)v`
       );
     }
     return (
-      config?.maleLengthZero?.replace("${length}", String(length)) ??
+      config?.maleLengthZero?.replaceAll("${length}", String(length)) ||
       "♂今天的牛~牛长度是....今天你是女的啊？，算了算了\n︿(￣︶￣)︿"
     );
   }
 
   if (length > 25) {
     return (
-      config?.femaleLengthVeryLarge?.replace("${length}", String(length)) ??
+      config?.femaleLengthVeryLarge?.replaceAll("${length}", String(length)) ||
       `♀今天的牛~牛长度是${length}cm，嘶哈嘶哈\n(((o(*°▽°*)o)))...`
     );
   }
   if (length > 20) {
     return (
-      config?.femaleLengthLarge?.replace("${length}", String(length)) ??
+      config?.femaleLengthLarge?.replaceAll("${length}", String(length)) ||
       `♀今天的牛~牛长度是${length}cm，单是看到哥哥的长度就....\n(〃w〃)`
     );
   }
   if (length > 15) {
     return (
-      config?.femaleLengthMedium?.replace("${length}", String(length)) ??
+      config?.femaleLengthMedium?.replaceAll("${length}", String(length)) ||
       `♀今天的牛~牛长度是${length}cm，也许我们今晚能做很多很多事情呢\n(〃∇〃)`
     );
   }
   if (length > 5) {
     return (
-      config?.femaleLengthSmall?.replace("${length}", String(length)) ??
+      config?.femaleLengthSmall?.replaceAll("${length}", String(length)) ||
       `♀今天的牛~牛长度是${length}cm，可以让我一口吃掉吗\n罒ω罒`
     );
   }
   if (length > 1) {
     return (
-      config?.femaleLengthVerySmall?.replace("${length}", String(length)) ??
+      config?.femaleLengthVerySmall?.replaceAll("${length}", String(length)) ||
       `♀今天的牛~牛长度是${length}cm，什么嘛，原来是可爱的小豆丁呀\n(*°ｰ°)v`
     );
   }
   return (
-    config?.femaleLengthZero?.replace("${length}", String(length)) ??
+    config?.femaleLengthZero?.replaceAll("${length}", String(length)) ||
     "♀今天的牛~牛长度是....今天你是女孩子，小姐姐的派派可以让我摸摸吗\n(๑‾ ꇴ ‾๑)"
   );
 }
