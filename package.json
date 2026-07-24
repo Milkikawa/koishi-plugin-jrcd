@@ -1,7 +1,7 @@
 {
   "name": "@cozmello/koishi-plugin-jrcd",
   "description": "查看今日长度，然后跟群友比比谁的更长，争当今日牛子豪",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "packageManager": "yarn@4.5.3",
   "main": "lib/index.js",
   "typings": "lib/index.d.ts",
