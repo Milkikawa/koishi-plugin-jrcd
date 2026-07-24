@@ -3,6 +3,7 @@ import test from "node:test";
 
 import {
   createDailyResult,
+  formatDailyResult,
   getShanghaiDayKey,
   javaStringHash,
   randomInRange,
@@ -23,6 +24,102 @@ test("javaStringHash 按 Java UTF-16 语义覆盖空串、中文和 emoji", () =
 
   for (const [source, expected] of vectors) {
     assert.equal(javaStringHash(source), expected, source);
+  }
+});
+
+test("formatDailyResult 无 config 时返回默认文案", () => {
+  const male26 = formatDailyResult({
+    dayKey: "2026-07-22",
+    userKey: "mock:u",
+    length: 26,
+    style: "male",
+  });
+  assert.ok(male26.includes("26cm"));
+  assert.ok(male26.startsWith("♂"));
+
+  const female0 = formatDailyResult({
+    dayKey: "2026-07-22",
+    userKey: "mock:u",
+    length: 0,
+    style: "female",
+  });
+  assert.ok(female0.startsWith("♀"));
+});
+
+test("formatDailyResult 使用 config 时覆盖默认文案且替换 ${length}", () => {
+  const config = {
+    maleLengthVeryLarge: "自定义男超大：${length}cm好厉害",
+    femaleLengthSmall: "自定义女小：长度${length}",
+  };
+
+  const male26 = formatDailyResult(
+    { dayKey: "2026-07-22", userKey: "mock:u", length: 26, style: "male" },
+    config
+  );
+  assert.equal(male26, "自定义男超大：26cm好厉害");
+
+  const female8 = formatDailyResult(
+    { dayKey: "2026-07-22", userKey: "mock:u", length: 8, style: "female" },
+    config
+  );
+  assert.equal(female8, "自定义女小：长度8");
+});
+
+test("formatDailyResult 支持多个 ${length} 占位符全部替换", () => {
+  const config = {
+    maleLengthLarge: "长度${length}cm，重复${length}cm，再来${length}",
+  };
+  const result = formatDailyResult(
+    { dayKey: "2026-07-22", userKey: "mock:u", length: 22, style: "male" },
+    config
+  );
+  assert.equal(result, "长度22cm，重复22cm，再来22");
+});
+
+test("formatDailyResult 空字符串字段回退到默认文案", () => {
+  const config = {
+    maleLengthVeryLarge: "",
+    femaleLengthZero: "",
+  };
+
+  const male26 = formatDailyResult(
+    { dayKey: "2026-07-22", userKey: "mock:u", length: 26, style: "male" },
+    config
+  );
+  assert.ok(male26.startsWith("♂"), "空字符串应回退到默认男性文案");
+  assert.ok(male26.includes("26cm"));
+
+  const female0 = formatDailyResult(
+    { dayKey: "2026-07-22", userKey: "mock:u", length: 0, style: "female" },
+    config
+  );
+  assert.ok(female0.startsWith("♀"), "空字符串应回退到默认女性文案");
+});
+
+test("formatDailyResult 覆盖全部 6 个长度档位 × male/female", () => {
+  // 各档位边界值: >25, >20, >15, >5, >1, ≤1
+  const lengthTiers = [
+    { length: 26, tier: "VeryLarge" },
+    { length: 21, tier: "Large" },
+    { length: 16, tier: "Medium" },
+    { length: 6, tier: "Small" },
+    { length: 2, tier: "VerySmall" },
+    { length: 0, tier: "Zero" },
+  ];
+
+  for (const style of ["male", "female"] as const) {
+    for (const { length, tier } of lengthTiers) {
+      const result = formatDailyResult({
+        dayKey: "2026-07-22",
+        userKey: "mock:u",
+        length,
+        style,
+      });
+      assert.ok(
+        typeof result === "string" && result.length > 0,
+        `${style}/${tier}(length=${length}) 应返回非空字符串`
+      );
+    }
   }
 });
 

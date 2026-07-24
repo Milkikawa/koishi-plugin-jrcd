@@ -69,7 +69,7 @@ export function registerCommands(ctx: Context, config: Config): void {
 
       const current = createUserIdentity(session.platform, session.userId);
       const result = createDailyResult(config.seed, current.userKey);
-      return [h.at(current.userId), formatDailyResult(result)];
+      return [h.at(current.userId), formatDailyResult(result, config)];
     });
 
   ctx
